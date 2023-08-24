@@ -1,0 +1,103 @@
+<!doctype html>
+<div id="container">
+  <p id="title">
+    Calculate kafka partition of a message by key<br>
+    and the number of partitions of the topic
+  </p>
+  <form id="form">
+    <input type="text" id="key" placeholder="key" autofocus>
+    <input type="number" value="20" id="partitions" placeholder="partitions">
+    <button type="submit" id="submit">Calc</button>
+  </form>
+  <div id="result"></div>
+</div>
+
+<style>
+@import url("https://dev-cats.github.io/code-snippets/JetBrainsMono.css");
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+:root {
+  color-scheme: light dark;
+}
+html, body {
+  height: 100%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: JetBrains Mono;
+}
+#container {
+  max-width: 600px;
+}
+#result {
+  height: 200px;
+}
+#key, #partitions {
+  height: 40px;
+  border: 2px solid #82aaff;
+  background: #222436;
+  border-radius: 2px;
+  color: #fff;
+  font-size: 16px;
+  font-family: JetBrains Mono;
+  padding: 0 10px;
+  outline: none;
+  &:focus {
+    box-shadow: 0 0 0 1px #82aaff;
+  }
+}
+#key {
+  width: 300px;
+}
+#partitions {
+  width: 80px;
+}
+#submit {
+  height: 40px;
+  border: 2px solid #82aaff;
+  background: #86e1fc;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: JetBrains Mono;
+  color: #1b1d2b;
+}
+#result {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 32px;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+
+<script type="module">
+  import {murmur2} from "murmurhash-js"
+
+  const SEED = 0x9747b28c
+
+  const form = document.getElementById('form')
+  const key = document.getElementById('key')
+  const partitions = document.getElementById('partitions')
+  const submit = document.getElementById('submit')
+  const result = document.getElementById('result')
+
+  const calculate = (e) => {
+    e.preventDefault()
+    const n = Number(partitions.value)
+    const h = murmur2(key.value, SEED)
+    const r = h % n
+    result.textContent = r
+  }
+
+  submit.addEventListener('click', calculate)
+  form.addEventListener('submit', calculate)
+</script>
