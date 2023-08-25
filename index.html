@@ -97,7 +97,7 @@ body {
 
   const calculate = (k, p) => {
     const n = Number(p)
-    const h = murmur2(k, SEED)
+    const h = murmur2(k, SEED) & 0x7fffffff
     const r = h % n
     result.textContent = r
     window.history.replaceState(null, '', `/${k}/${p}`)
