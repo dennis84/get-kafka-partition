@@ -90,14 +90,26 @@ body {
   const submit = document.getElementById('submit')
   const result = document.getElementById('result')
 
-  const calculate = (e) => {
+  const listener = (e) => {
     e.preventDefault()
-    const n = Number(partitions.value)
-    const h = murmur2(key.value, SEED)
-    const r = h % n
-    result.textContent = r
+    calculate(key.value, partitions.value)
   }
 
-  submit.addEventListener('click', calculate)
-  form.addEventListener('submit', calculate)
+  const calculate = (k, p) => {
+    const n = Number(p)
+    const h = murmur2(k, SEED)
+    const r = h % n
+    result.textContent = r
+    window.history.replaceState(null, '', `/${k}/${p}`)
+  }
+
+  submit.addEventListener('click', listener)
+  form.addEventListener('submit', listener)
+
+  const [,k, p] = location.pathname.split('/')
+  if (k && p) {
+    key.value = k
+    partitions.value = p
+    calculate(k, p)
+  }
 </script>
